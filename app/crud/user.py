@@ -9,33 +9,7 @@ from app.core.security import get_password_hash, verify_password
 
 
 class CRUDUser:
-    @staticmethod
-    async def get_by_id(db: AsyncSession, user_id: int) -> Optional[User]:
-        result = await db.execute(select(User).filter(User.id == user_id))
-        return result.scalar_one_or_none()
 
-    @staticmethod
-    async def get_by_email(db: AsyncSession, email: str) -> Optional[User]:
-        result = await db.execute(select(User).filter(User.email == email))
-        return result.scalar_one_or_none()
-
-    @staticmethod
-    async def get_by_username(db: AsyncSession, username: str) -> Optional[User]:
-        result = await db.execute(select(User).filter(User.username == username))
-        return result.scalar_one_or_none()
-
-    @staticmethod
-    async def create(db: AsyncSession, user_in: UserCreate) -> User:
-        hashed_password = get_password_hash(user_in.password)
-        db_user = User(
-            username=user_in.username,
-            email=user_in.email,
-            hashed_password=hashed_password,
-        )
-        db.add(db_user)
-        await db.commit()
-        await db.refresh(db_user)
-        return db_user
 
     @staticmethod
     async def update(db: AsyncSession, db_user: User, user_in: UserUpdate) -> User:
