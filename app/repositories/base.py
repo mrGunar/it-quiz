@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, Optional, List, Dict, Any
+from typing import Generic, TypeVar, Optional, List
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, delete
@@ -59,7 +59,6 @@ class SQLAlchemyRepository(
     ) -> List[ModelType]:
         query = select(self.model)
 
-        # Apply filters
         for field, value in filters.items():
             if value is not None:
                 query = query.where(getattr(self.model, field) == value)
@@ -69,13 +68,11 @@ class SQLAlchemyRepository(
         return result.scalars().all()
 
     async def update(self, id: int, obj_in: UpdateSchemaType) -> Optional[ModelType]:
-        # Get update data, excluding unset values
         update_data = obj_in.dict(exclude_unset=True)
 
         if not update_data:
             return await self.get(id)
 
-        # Execute update
         stmt = (
             update(self.model)
             .where(self.model.id == id)
@@ -99,7 +96,6 @@ class SQLAlchemyRepository(
         return result.rowcount > 0
 
     async def count(self, **filters) -> int:
-        """Count records with optional filters"""
         from sqlalchemy import func
 
         query = select(func.count()).select_from(self.model)
@@ -112,7 +108,6 @@ class SQLAlchemyRepository(
         return result.scalar()
 
     async def exists(self, **filters) -> bool:
-        """Check if a record exists with given filters"""
         query = select(self.model).limit(1)
 
         for field, value in filters.items():

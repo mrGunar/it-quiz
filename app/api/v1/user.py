@@ -10,7 +10,6 @@ from app.core.config import settings
 from app.api.dependencies import (
     get_current_active_user,
     get_user_service,
-    get_repository_factory,
 )
 from app.services.user_service import UserService
 

@@ -1,13 +1,44 @@
-from typing import Any
+from typing import List, Dict, Any, Optional
+
 from app.repositories import RepositoryFactory
 from app.schemas.quiz import QuizRequest, QuizSubmit
+from app.schemas.questions import QuestionCreate, QuestionUpdate
+from app.models.quiz import DifficultyLevel
+from app.models.categories import Category
 
 
-class QuizService:
+class QuestionService:
     def __init__(self, repository_factory: RepositoryFactory):
         self.repo_factory = repository_factory
 
-    async def generate_quiz(self, quiz_request: QuizRequest) -> list[dict[str, Any]]:
+    async def create_question(self, question_in: QuestionCreate):
+        correct_answers = [a for a in question_in.answers if a.is_correct]
+        if len(correct_answers) != 1:
+            raise ValueError("Question must have exactly one correct answer")
+
+        return await self.repo_factory.questions.create(question_in)
+
+    async def get_question(self, question_id: int):
+        return await self.repo_factory.questions.get_with_answers(question_id)
+
+    async def get_questions(
+        self,
+        skip: int = 0,
+        limit: int = 100,
+        category: Optional[Category] = None,
+        difficulty: Optional[DifficultyLevel] = None,
+    ) -> List:
+        filters = {}
+        if category:
+            filters["category"] = category
+        if difficulty:
+            filters["difficulty"] = difficulty
+
+        return await self.repo_factory.questions.get_multi_with_answers(
+            skip=skip, limit=limit, **filters
+        )
+
+    async def generate_quiz(self, quiz_request: QuizRequest) -> List[Dict[str, Any]]:
         questions = await self.repo_factory.questions.get_random_questions(
             category=quiz_request.category,
             difficulty=quiz_request.difficulty,
@@ -33,7 +64,7 @@ class QuizService:
 
     async def submit_quiz(
         self, user_id: int, quiz_submit: QuizSubmit
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         score = 0
         results = []
 
@@ -79,3 +110,9 @@ class QuizService:
             "percentage": (score / total_questions * 100) if total_questions > 0 else 0,
             "results": results,
         }
+
+    async def update_question(self, question_id: int, question_in: QuestionUpdate):
+        return await self.repo_factory.questions.update(question_id, question_in)
+
+    async def delete_question(self, question_id: int) -> bool:
+        return await self.repo_factory.questions.delete(question_id)

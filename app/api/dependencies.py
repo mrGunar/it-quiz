@@ -4,10 +4,15 @@ from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
-from app.crud.user import crud_user
 from app.core.config import settings
 from app.repositories import RepositoryFactory
+from app.services.quiz_service import QuizService
 from app.services.user_service import UserService
+from app.services.category_service import CategoryService
+from app.services.answer_service import AnswerService
+from app.services.question_service import QuestionService
+from app.services.user_response_service import UserResponseService
+from app.services.difficulty_service import DifficultyService
 
 security = HTTPBearer()
 
@@ -20,6 +25,42 @@ def get_user_service(
     repo_factory: RepositoryFactory = Depends(get_repository_factory),
 ) -> UserService:
     return UserService(repo_factory)
+
+
+def get_category_service(
+    repo_factory: RepositoryFactory = Depends(get_repository_factory),
+) -> CategoryService:
+    return CategoryService(repo_factory)
+
+
+def get_question_service(
+    repo_factory: RepositoryFactory = Depends(get_repository_factory),
+) -> QuestionService:
+    return QuestionService(repo_factory)
+
+
+def get_user_response_service(
+    repo_factory: RepositoryFactory = Depends(get_repository_factory),
+) -> UserResponseService:
+    return UserResponseService(repo_factory)
+
+
+def get_answer_service(
+    repo_factory: RepositoryFactory = Depends(get_repository_factory),
+) -> AnswerService:
+    return AnswerService(repo_factory)
+
+
+def get_difficulty_service(
+    repo_factory: RepositoryFactory = Depends(get_repository_factory),
+) -> DifficultyService:
+    return DifficultyService(repo_factory)
+
+
+def get_quiz_service(
+    repo_factory: RepositoryFactory = Depends(get_repository_factory),
+) -> QuizService:
+    return QuizService(repo_factory)
 
 
 async def get_current_user(

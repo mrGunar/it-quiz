@@ -1,7 +1,5 @@
 from typing import Any
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.repositories import RepositoryFactory
 from app.schemas.user import UserCreate, UserUpdate
 from app.models.user import User
