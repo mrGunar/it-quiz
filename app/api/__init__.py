@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1 import difficulties, user, quiz, categories, questions
+from app.api.v1 import difficulties, user, quiz, categories, questions, answers
 
 api_router = APIRouter()
 
@@ -10,3 +10,4 @@ api_router.include_router(questions.router, prefix="/questions", tags=["question
 api_router.include_router(
     difficulties.router, prefix="/difficilties", tags=["difficilties"]
 )
+api_router.include_router(answers.router, prefix="/answers", tags=["answers"])

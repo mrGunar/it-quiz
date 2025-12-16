@@ -19,10 +19,10 @@ router = APIRouter()
 @router.post("/register", response_model=UserResponse)
 async def register(
     user_in: UserCreate,
-    user_service: UserService = Depends(get_user_service),
+    service: UserService = Depends(get_user_service),
 ):
     try:
-        user = await user_service.register_user(user_in)
+        user = await service.register_user(user_in)
         return user
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -31,9 +31,9 @@ async def register(
 @router.post("/login", response_model=Token)
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    user_service: UserService = Depends(get_user_service),
+    service: UserService = Depends(get_user_service),
 ):
-    user = await user_service.authenticate_user(
+    user = await service.authenticate_user(
         username=form_data.username, password=form_data.password
     )
 
@@ -55,10 +55,10 @@ async def login(
 @router.put("/me", response_model=UserResponse)
 async def update_user_me(
     user_in: UserUpdate,
-    user_service: UserService = Depends(get_user_service),
+    service: UserService = Depends(get_user_service),
     current_user=Depends(get_current_active_user),
 ):
-    user = await user_service.update_user(current_user.id, user_in)
+    user = await service.update_user(current_user.id, user_in)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
@@ -66,16 +66,16 @@ async def update_user_me(
 
 @router.get("/leaderboard")
 async def get_leaderboard(
-    limit: int = 10, user_service: UserService = Depends(get_user_service)
+    limit: int = 10, service: UserService = Depends(get_user_service)
 ):
-    leaderboard = await user_service.get_leaderboard(limit)
+    leaderboard = await service.get_leaderboard(limit)
     return leaderboard
 
 
 @router.get("/stats")
 async def get_user_stats(
-    user_service: UserService = Depends(get_user_service),
+    service: UserService = Depends(get_user_service),
     current_user=Depends(get_current_active_user),
 ):
-    stats = await user_service.get_user_stats(current_user.id)
+    stats = await service.get_user_stats(current_user.id)
     return stats

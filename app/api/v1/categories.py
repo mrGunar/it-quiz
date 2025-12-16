@@ -6,6 +6,6 @@ router = APIRouter()
 
 
 @router.get("/categories")
-async def get_categories(quiz_service: CategoryService = Depends(get_category_service)):
-    categories = await quiz_service.get_categories()
+async def get_categories(service: CategoryService = Depends(get_category_service)):
+    categories = await service.get_categories()
     return categories

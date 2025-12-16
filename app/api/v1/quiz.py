@@ -17,18 +17,18 @@ router = APIRouter()
 @router.post("/quiz/generate")
 async def generate_quiz(
     quiz_request: QuizRequest,
-    quiz_service: QuizService = Depends(get_quiz_service),
+    service: QuizService = Depends(get_quiz_service),
     current_user: User = Depends(get_current_active_user),
 ):
-    questions = await quiz_service.generate_quiz(quiz_request)
+    questions = await service.generate_quiz(quiz_request)
     return questions
 
 
 @router.post("/quiz/submit", response_model=QuizResponse)
 async def submit_quiz(
     quiz_submit: QuizSubmit,
-    quiz_service: QuizService = Depends(get_quiz_service),
+    service: QuizService = Depends(get_quiz_service),
     current_user: User = Depends(get_current_active_user),
 ):
-    result = await quiz_service.submit_quiz(current_user.id, quiz_submit)
+    result = await service.submit_quiz(current_user.id, quiz_submit)
     return result
