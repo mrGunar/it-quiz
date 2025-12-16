@@ -14,18 +14,18 @@ class QuestionBase(BaseModel):
 
 
 class QuestionCreate(QuestionBase):
-    answers: List[AnswerCreate]
+    category: int
 
 
 class QuestionUpdate(BaseModel):
     question_text: Optional[str] = None
     difficulty: Optional[DifficultyLevel] = None
     explanation: Optional[str] = None
+    category: Optional[int] = None
 
 
 class QuestionResponse(QuestionBase):
     id: int
-    answers: List[AnswerResponse]
     created_at: datetime
 
     class Config:

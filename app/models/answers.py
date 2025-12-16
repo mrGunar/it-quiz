@@ -9,6 +9,8 @@ class Answer(BaseModel):
 
     answer_text = Column(Text, nullable=False)
     is_correct = Column(Boolean, default=False, nullable=False)
-    question_id = Column(Integer, ForeignKey("questions.id", ondelete="CASCADE"))
+    question_id = Column(
+        Integer, ForeignKey("questions.id", ondelete="CASCADE"), nullable=False
+    )
 
     question = relationship("Question", back_populates="answers")

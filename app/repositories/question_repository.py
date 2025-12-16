@@ -22,23 +22,18 @@ class QuestionRepository(
         super().__init__(Question, db_session)
 
     async def create(self, obj_in: QuestionCreate) -> Question:
-        db_question = Question(
+
+        new_question = Question(
             question_text=obj_in.question_text,
-            category=obj_in.category,
+            category_id=obj_in.category,
             difficulty=obj_in.difficulty,
             explanation=obj_in.explanation,
         )
 
-        for answer_in in obj_in.answers:
-            db_answer = Answer(
-                answer_text=answer_in.answer_text, is_correct=answer_in.is_correct
-            )
-            db_question.answers.append(db_answer)
-
-        self.db_session.add(db_question)
+        self.db_session.add(new_question)
         await self.db_session.commit()
-        await self.db_session.refresh(db_question)
-        return db_question
+        await self.db_session.refresh(new_question)
+        return new_question
 
     async def get_with_answers(self, question_id: int) -> Optional[Question]:
         result = await self.db_session.execute(

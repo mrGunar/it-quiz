@@ -6,4 +6,4 @@ from app.models.base import BaseModel
 class Category(BaseModel):
     __tablename__ = "categories"
 
-    category = Column(Text, nullable=False)
+    category = Column(Text, nullable=False, unique=True)

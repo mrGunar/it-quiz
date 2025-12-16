@@ -12,10 +12,6 @@ class QuestionService:
         self.repo_factory = repository_factory
 
     async def create_question(self, question_in: QuestionCreate):
-        correct_answers = [a for a in question_in.answers if a.is_correct]
-        if len(correct_answers) != 1:
-            raise ValueError("Question must have exactly one correct answer")
-
         return await self.repo_factory.questions.create(question_in)
 
     async def get_question(self, question_id: int):

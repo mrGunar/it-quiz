@@ -12,6 +12,11 @@ class AnswerCreate(AnswerBase):
     pass
 
 
+class AnswerUpdate(AnswerBase):
+    answer_text: str | None = None
+    is_correct: bool | None = None
+
+
 class AnswerResponse(AnswerBase):
     id: int
     created_at: datetime
