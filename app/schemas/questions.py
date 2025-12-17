@@ -21,7 +21,7 @@ class QuestionUpdate(BaseModel):
     question_text: Optional[str] = None
     difficulty: Optional[DifficultyLevel] = None
     explanation: Optional[str] = None
-    category: Optional[int] = None
+    category_id: Optional[int] = None
 
 
 class QuestionResponse(QuestionBase):

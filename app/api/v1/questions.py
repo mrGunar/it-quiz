@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from typing import List
+from fastapi import APIRouter, Depends, HTTPException
+
 from app.schemas.questions import (
     QuestionCreate,
     QuestionResponse,
@@ -29,7 +29,7 @@ async def create_question(
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/questions/", response_model=List[QuestionResponse])
+@router.get("/questions/", response_model=list[QuestionResponse])
 async def read_questions(
     skip: int = 0,
     limit: int = 100,

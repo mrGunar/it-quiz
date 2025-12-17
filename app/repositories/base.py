@@ -73,6 +73,7 @@ class SQLAlchemyRepository(
         if not update_data:
             return await self.get(id)
 
+        # TODO: FK constraint by category_id
         stmt = (
             update(self.model)
             .where(self.model.id == id)
