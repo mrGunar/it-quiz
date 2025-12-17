@@ -6,6 +6,7 @@ from app.models.quiz import DifficultyLevel
 
 
 class QuizRequest(BaseModel):
+    category_id: int | None = None
     difficulty: Optional[DifficultyLevel] = None
     num_questions: int = 10
 

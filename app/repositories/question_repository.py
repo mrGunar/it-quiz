@@ -7,6 +7,7 @@ from app.models.answers import Answer
 from app.models.quiz import DifficultyLevel
 from app.models.categories import Category
 from app.models.questions import Question
+from app.models.answers import Answer
 from app.models.user_responses import UserResponse
 
 from app.models.user import User
@@ -58,26 +59,22 @@ class QuestionRepository(
 
     async def get_random_questions(
         self,
-        category: Optional[Category] = None,
+        category_id: int | None = None,
         difficulty: Optional[DifficultyLevel] = None,
         limit: int = 10,
     ) -> List[Question]:
-        query = select(Question).options(selectinload(Question.answers))
+        query = select(Question)
 
-        if category:
-            query = query.where(Question.category == category)
+        if category_id:
+            query = query.where(Question.category_id == category_id)
         if difficulty:
             query = query.where(Question.difficulty == difficulty)
 
         result = await self.db_session.execute(query)
         all_questions = result.scalars().all()
-
         selected_questions = random.sample(
             all_questions, min(limit, len(all_questions))
         )
-
-        for question in selected_questions:
-            random.shuffle(question.answers)
 
         return selected_questions
 

@@ -1,4 +1,5 @@
 from typing import Any
+
 from app.repositories import RepositoryFactory
 from app.schemas.quiz import QuizRequest, QuizSubmit
 
@@ -8,9 +9,10 @@ class QuizService:
         self.repo_factory = repository_factory
 
     async def generate_quiz(self, quiz_request: QuizRequest) -> list[dict[str, Any]]:
+        """Generate a simple quiz game."""
         questions = await self.repo_factory.questions.get_random_questions(
-            category=quiz_request.category,
-            difficulty=quiz_request.difficulty,
+            category_id=quiz_request.category_id,
+            difficulty=quiz_request.difficulty.upper(),
             limit=quiz_request.num_questions,
         )
 
@@ -20,11 +22,15 @@ class QuizService:
                 {
                     "id": question.id,
                     "question_text": question.question_text,
-                    "category": question.category.value,
+                    "category": await self.repo_factory.categories.get(
+                        quiz_request.category_id
+                    ),
                     "difficulty": question.difficulty.value,
                     "answers": [
                         {"id": answer.id, "answer_text": answer.answer_text}
-                        for answer in question.answers
+                        for answer in await self.repo_factory.answers.get_by_question_id(
+                            question.id
+                        )
                     ],
                 }
             )
