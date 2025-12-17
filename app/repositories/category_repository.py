@@ -1,8 +1,5 @@
-from fastapi import HTTPException
-
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, and_
-from sqlalchemy.orm import selectinload
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
 from app.models.categories import Category
