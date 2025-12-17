@@ -22,19 +22,24 @@ async def get_answers_for_question_by_id(
     return answers
 
 
-@router.post("/answers")
-async def create_answer_for_question(
+@router.post(
+    "/answers",
+    response_model=AnswerResponse,
+    status_code=201,
+)
+async def create(
     answer_in: AnswerCreate,
     service: AnswerService = Depends(get_answer_service),
 ):
+    """Create an answer."""
     try:
-        answers = await service.create_for_question(answer_in)
-        return answers
+        answer = await service.create_for_question(answer_in)
+        return answer
     except Exception as err:
         raise HTTPException(status_code=400, detail=str(err))
 
 
-@router.put("/answers/{answer_id}")
+@router.put("/answers/{answer_id}", response_model=AnswerResponse)
 async def update(
     answer_id: int,
     answer_in: AnswerUpdate,
@@ -45,7 +50,8 @@ async def update(
         answer = await service.update(answer_id, answer_in)
     except Exception as err:
         raise HTTPException(status_code=400, detail=str(err))
-    logger.info("A category has been updated successfully.")
+
+    logger.info("An answer has been updated successfully.")
     if answer is None:
         logger.error(f"Failed to update an answer. The answer not found.")
         raise HTTPException(status_code=400, detail="The answer not found")
@@ -60,12 +66,12 @@ async def delete(
     answer_id: int,
     service: AnswerService = Depends(get_answer_service),
 ):
-    """Delete a category by id."""
+    """Delete an answer by id."""
     deleted = await service.delete(answer_id)
-    logger.info("An answer has been deleted successfully.")
+    logger.info("The answer has been deleted successfully.")
     if not deleted:
         logger.error(
-            f"Failed to delete a category by id: `{answer_id}`. The answer not found."
+            f"Failed to delete a answer by id: `{answer_id}`. The answer not found."
         )
         raise HTTPException(status_code=404, detail="The answer not found")
     return {"message": "Answer deleted successfully"}
