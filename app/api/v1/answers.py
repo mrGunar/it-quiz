@@ -1,28 +1,71 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
+
 from app.services.answer_service import AnswerService
 from app.api.dependencies import get_answer_service
-from app.schemas.answers import AnswerCreate
+from app.schemas.answers import AnswerCreate, AnswerResponse, AnswerUpdate
+from app.middleware.logger import logger
 
 router = APIRouter()
 
 
-@router.get("/answers")
+@router.get("/answers", response_model=list[AnswerResponse])
 async def get_answers_for_question_by_id(
     question_id: int,
     service: AnswerService = Depends(get_answer_service),
 ):
     answers = await service.get_for_question_by_id(question_id)
+
+    if not answers:
+        raise HTTPException(
+            status_code=404, detail="There are no answers for this question."
+        )
     return answers
 
 
 @router.post("/answers")
 async def create_answer_for_question(
-    question_id: int,
     answer_in: AnswerCreate,
     service: AnswerService = Depends(get_answer_service),
 ):
     try:
-        answers = await service.create_for_question(question_id, answer_in)
+        answers = await service.create_for_question(answer_in)
         return answers
     except Exception as err:
-        raise HTTPException(status_code=err.status_code, detail=err.message)
+        raise HTTPException(status_code=400, detail=str(err))
+
+
+@router.put("/answers/{answer_id}")
+async def update(
+    answer_id: int,
+    answer_in: AnswerUpdate,
+    service: AnswerService = Depends(get_answer_service),
+):
+    """Update the answer by id."""
+    try:
+        answer = await service.update(answer_id, answer_in)
+    except Exception as err:
+        raise HTTPException(status_code=400, detail=str(err))
+    logger.info("A category has been updated successfully.")
+    if answer is None:
+        logger.error(f"Failed to update an answer. The answer not found.")
+        raise HTTPException(status_code=400, detail="The answer not found")
+    return answer
+
+
+@router.delete(
+    "/answers/{answer_id}",
+    status_code=204,
+)
+async def delete(
+    answer_id: int,
+    service: AnswerService = Depends(get_answer_service),
+):
+    """Delete a category by id."""
+    deleted = await service.delete(answer_id)
+    logger.info("An answer has been deleted successfully.")
+    if not deleted:
+        logger.error(
+            f"Failed to delete a category by id: `{answer_id}`. The answer not found."
+        )
+        raise HTTPException(status_code=404, detail="The answer not found")
+    return {"message": "Answer deleted successfully"}

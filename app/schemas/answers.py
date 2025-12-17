@@ -6,6 +6,7 @@ from pydantic import BaseModel
 class AnswerBase(BaseModel):
     answer_text: str
     is_correct: bool
+    question_id: int
 
 
 class AnswerCreate(AnswerBase):
@@ -15,6 +16,7 @@ class AnswerCreate(AnswerBase):
 class AnswerUpdate(AnswerBase):
     answer_text: str | None = None
     is_correct: bool | None = None
+    question_id: int | None = None
 
 
 class AnswerResponse(AnswerBase):

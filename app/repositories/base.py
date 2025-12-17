@@ -4,6 +4,8 @@ from typing import Generic, TypeVar, Optional, List
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, delete
 from sqlalchemy.ext.declarative import DeclarativeMeta
+from sqlalchemy import func
+
 
 ModelType = TypeVar("ModelType")
 CreateSchemaType = TypeVar("CreateSchemaType")
@@ -97,8 +99,6 @@ class SQLAlchemyRepository(
         return result.rowcount > 0
 
     async def count(self, **filters) -> int:
-        from sqlalchemy import func
-
         query = select(func.count()).select_from(self.model)
 
         for field, value in filters.items():
