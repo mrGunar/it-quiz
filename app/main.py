@@ -8,8 +8,6 @@ from app.api import api_router
 from app.core.config import settings
 from app.database import engine, Base
 from app.middleware.logger import SimpleLoggingMiddleware
-from app.utils.faker_seed import seed_database
-from app.database import AsyncSessionLocal
 from app.middleware.logger import logger
 
 

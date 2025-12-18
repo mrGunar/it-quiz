@@ -17,9 +17,7 @@ Base = declarative_base()
 
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    """
-    Dependency function that yields db sessions
-    """
+    """Dependency function that yields db sessions."""
     async with AsyncSessionLocal() as session:
         try:
             yield session
