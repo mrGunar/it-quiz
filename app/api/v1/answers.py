@@ -8,7 +8,7 @@ from app.middleware.logger import logger
 router = APIRouter()
 
 
-@router.get("/answers", response_model=list[AnswerResponse])
+@router.get("/", response_model=list[AnswerResponse])
 async def get_answers_for_question_by_id(
     question_id: int,
     service: AnswerService = Depends(get_answer_service),
@@ -23,7 +23,7 @@ async def get_answers_for_question_by_id(
 
 
 @router.post(
-    "/answers",
+    "/",
     response_model=AnswerResponse,
     status_code=201,
 )
@@ -39,7 +39,7 @@ async def create(
         raise HTTPException(status_code=400, detail=str(err))
 
 
-@router.put("/answers/{answer_id}", response_model=AnswerResponse)
+@router.put("/{answer_id}", response_model=AnswerResponse)
 async def update(
     answer_id: int,
     answer_in: AnswerUpdate,
@@ -59,7 +59,7 @@ async def update(
 
 
 @router.delete(
-    "/answers/{answer_id}",
+    "/{answer_id}",
     status_code=204,
 )
 async def delete(

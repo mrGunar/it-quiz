@@ -14,7 +14,7 @@ from app.services.quiz_service import QuizService
 router = APIRouter()
 
 
-@router.post("/quiz/generate")
+@router.post("/generate")
 async def generate_quiz(
     quiz_request: QuizRequest,
     service: QuizService = Depends(get_quiz_service),
@@ -24,7 +24,7 @@ async def generate_quiz(
     return questions
 
 
-@router.post("/quiz/submit", response_model=QuizResponse)
+@router.post("/submit", response_model=QuizResponse)
 async def submit_quiz(
     quiz_submit: QuizSubmit,
     service: QuizService = Depends(get_quiz_service),

@@ -7,7 +7,7 @@ from app.middleware.logger import logger
 router = APIRouter()
 
 
-@router.get("/difficulties", response_model=list[str])
+@router.get("/", response_model=list[str])
 async def get_difficulties(
     service: DifficultyService = Depends(get_difficulty_service),
 ):

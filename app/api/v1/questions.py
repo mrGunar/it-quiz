@@ -16,7 +16,7 @@ from app.models.user import User
 router = APIRouter()
 
 
-@router.post("/questions/", response_model=QuestionResponse)
+@router.post("/", response_model=QuestionResponse)
 async def create_question(
     question_in: QuestionCreate,
     service: QuestionService = Depends(get_question_service),
@@ -29,7 +29,7 @@ async def create_question(
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/questions/", response_model=list[QuestionResponse])
+@router.get("/", response_model=list[QuestionResponse])
 async def read_questions(
     skip: int = 0,
     limit: int = 100,
@@ -44,7 +44,7 @@ async def read_questions(
     return questions
 
 
-@router.get("/questions/{question_id}", response_model=QuestionResponse)
+@router.get("/{question_id}", response_model=QuestionResponse)
 async def read_question(
     question_id: int,
     service: QuestionService = Depends(get_question_service),
@@ -56,7 +56,7 @@ async def read_question(
     return question
 
 
-@router.put("/questions/{question_id}", response_model=QuestionResponse)
+@router.put("/{question_id}", response_model=QuestionResponse)
 async def update_question(
     question_id: int,
     question_in: QuestionUpdate,
@@ -69,7 +69,7 @@ async def update_question(
     return question
 
 
-@router.delete("/questions/{question_id}")
+@router.delete("/{question_id}")
 async def delete_question(
     question_id: int,
     service: QuestionService = Depends(get_question_service),
