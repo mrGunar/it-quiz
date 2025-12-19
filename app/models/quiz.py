@@ -2,6 +2,7 @@ import enum
 
 
 class DifficultyLevel(str, enum.Enum):
-    EASY = "easy"
-    MEDIUM = "medium"
-    HARD = "hard"
+    EASY = "Easy"
+    MEDIUM = "Medium"
+    HARD = "Hard"
+    VERY_HARD = "Very Hard"

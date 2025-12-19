@@ -18,7 +18,8 @@ router = APIRouter()
 async def generate_quiz(
     quiz_request: QuizRequest,
     service: QuizService = Depends(get_quiz_service),
-    current_user: User = Depends(get_current_active_user),
+    # TODO: tmp comment this line
+    # current_user: User = Depends(get_current_active_user),
 ):
     questions = await service.generate_quiz(quiz_request)
     return questions

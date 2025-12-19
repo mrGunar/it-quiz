@@ -20,7 +20,6 @@ dependencies = [
     "dnspython==2.8.0",
     "ecdsa==0.19.1",
     "email-validator==2.3.0",
-    "faker==38.2.0",
     "fastapi==0.124.2",
     "greenlet==3.3.0",
     "h11==0.16.0",
