@@ -70,7 +70,7 @@ class SQLAlchemyRepository(
         return result.scalars().all()
 
     async def update(self, id: int, obj_in: UpdateSchemaType) -> Optional[ModelType]:
-        update_data = obj_in.dict(exclude_unset=True)
+        update_data = obj_in.model_dump(exclude_unset=True)
 
         if not update_data:
             return await self.get(id)

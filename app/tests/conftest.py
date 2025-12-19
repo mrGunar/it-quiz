@@ -29,7 +29,7 @@ async def setup_test_database():
         await conn.run_sync(Base.metadata.drop_all)
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 async def db() -> AsyncGenerator[AsyncSession, None]:
     """Get a fresh database session."""
     async with TestingSessionLocal() as session:

@@ -9,11 +9,11 @@ router = APIRouter()
 
 
 @router.get(
-    "/categories",
+    "/",
     response_model=list[CategoryResponse],
     status_code=status.HTTP_200_OK,
     summary="Get all categories",
-    description="Retrieve all available categories from the system",
+    description="Retrieve all available categories from the database",
 )
 async def get(
     service: CategoryService = Depends(get_category_service),
@@ -41,7 +41,7 @@ async def get(
 
 
 @router.get(
-    "/categories/{category_id}",
+    "/{category_id}",
     response_model=CategoryResponse,
     status_code=status.HTTP_200_OK,
     summary="Get category by ID",
@@ -90,7 +90,7 @@ async def get(
 
 
 @router.post(
-    "/categories",
+    "/",
     response_model=CategoryResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Create new category",
@@ -129,7 +129,7 @@ async def create(
 
 
 @router.put(
-    "/categories/{category_id}",
+    "/{category_id}",
     response_model=CategoryResponse,
     status_code=status.HTTP_200_OK,
     summary="Update category",
@@ -163,7 +163,7 @@ async def update(
 
 
 @router.delete(
-    "/categories/{category_id}",
+    "/{category_id}",
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Delete category",
     description="Delete a category by ID",
