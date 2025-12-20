@@ -10,9 +10,11 @@ class QuizService:
 
     async def generate_quiz(self, quiz_request: QuizRequest) -> list[dict[str, Any]]:
         """Generate a simple quiz game."""
+
+        difficult = quiz_request.difficulty.upper() if quiz_request.difficulty else None
         questions = await self.repo_factory.questions.get_random_questions(
             category_id=quiz_request.category_id,
-            difficulty=quiz_request.difficulty.upper(),
+            difficulty=difficult,
             limit=quiz_request.num_questions,
         )
 
@@ -23,8 +25,9 @@ class QuizService:
                     "id": question.id,
                     "question_text": question.question_text,
                     "category": await self.repo_factory.categories.get(
-                        quiz_request.category_id
+                        question.category_id
                     ),
+                    "explanation": question.explanation,
                     "difficulty": question.difficulty.value,
                     "answers": [
                         {"id": answer.id, "answer_text": answer.answer_text}

@@ -8,7 +8,6 @@ from app.schemas.quiz import (
 )
 from app.api.dependencies import get_current_active_user, get_current_admin_user
 from app.models.user import User
-from app.middleware.logger import logger
 from app.services.quiz_service import QuizService
 
 router = APIRouter()
