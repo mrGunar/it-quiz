@@ -1,4 +1,4 @@
-from app.schemas.categories import CategoryCreate, CategoryUpdate
+from app.schemas.categories import CategoryCreate, CategoryUpdate, CategoryResponse
 from app.repositories import RepositoryFactory
 from app.models.categories import Category
 
@@ -21,3 +21,14 @@ class CategoryService:
 
     async def delete(self, category_id: int) -> bool:
         return await self.repo_factory.categories.delete(category_id)
+
+    async def get_all(
+        self,
+        skip: int = 0,
+        limit: int = 100,
+        name: str | None = None,
+    ) -> list[CategoryResponse]:
+        filters = {}
+        if name:
+            filters["category"] = name
+        return await self.repo_factory.categories.get_multi(skip, limit, **filters)

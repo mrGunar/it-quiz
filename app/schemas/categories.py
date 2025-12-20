@@ -18,3 +18,12 @@ class CategoryResponse(CategoryBase):
     category: str
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class CategoryListResponse(BaseModel):
+    items: list[CategoryResponse]
+    total: int
+    skip: int
+    limit: int
+
+    model_config = ConfigDict(from_attributes=True)

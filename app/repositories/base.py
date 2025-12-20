@@ -60,7 +60,6 @@ class SQLAlchemyRepository(
         self, skip: int = 0, limit: int = 100, **filters
     ) -> List[ModelType]:
         query = select(self.model)
-
         for field, value in filters.items():
             if value is not None:
                 query = query.where(getattr(self.model, field) == value)

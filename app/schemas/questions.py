@@ -28,3 +28,12 @@ class QuestionResponse(QuestionBase):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class QuestionsListResponse(BaseModel):
+    items: list[QuestionResponse]
+    total: int
+    skip: int
+    limit: int
+
+    model_config = ConfigDict(from_attributes=True)
