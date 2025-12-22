@@ -16,6 +16,7 @@ from app.services.question_service import QuestionService
 from app.models.user import User
 from app.middleware.logger import logger
 from app.shared.exceptions.questions import QuestionNotFoundError, QuestionCreationError
+from app.schemas.quiz import DifficultyLevel
 
 router = APIRouter()
 
@@ -86,7 +87,7 @@ async def read_questions(
     category: int | None = Query(
         default=None, description="Filter by question category"
     ),
-    difficulty: str | None = Query(
+    difficulty: DifficultyLevel | None = Query(
         default=None, description="Filter by question difficulty"
     ),
     service: QuestionService = Depends(get_question_service),
