@@ -83,7 +83,7 @@ async def read_questions(
         le=1000,
         description="Maximum number of questions to return",
     ),
-    category: str | None = Query(
+    category: int | None = Query(
         default=None, description="Filter by question category"
     ),
     difficulty: str | None = Query(
@@ -101,7 +101,7 @@ async def read_questions(
         questions = await service.get_questions(
             skip=skip,
             limit=limit,
-            category=category,
+            category_id=category,
             difficulty=difficulty,
         )
 

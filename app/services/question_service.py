@@ -21,12 +21,12 @@ class QuestionService:
         self,
         skip: int = 0,
         limit: int = 100,
-        category: Optional[Category] = None,
+        category_id: Optional[Category] = None,
         difficulty: Optional[DifficultyLevel] = None,
     ) -> List:
         filters = {}
-        if category:
-            filters["category"] = category
+        if category_id:
+            filters["category_id"] = category_id
         if difficulty:
             filters["difficulty"] = difficulty
 
